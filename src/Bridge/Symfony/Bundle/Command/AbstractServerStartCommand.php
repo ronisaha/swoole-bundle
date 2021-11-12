@@ -156,8 +156,9 @@ abstract class AbstractServerStartCommand extends Command
             /** @var string $apiPort */
             $apiPort = $input->getOption('api-port');
             Assertion::numeric($apiPort, 'Port must be a number.');
+            $apiHost = $sockets->hasApiSocket() ? $sockets->getApiSocket()->host() : '0.0.0.0';
 
-            $sockets->changeApiSocket(new Socket('0.0.0.0', (int) $apiPort));
+            $sockets->changeApiSocket(new Socket($apiHost, (int) $apiPort));
         }
 
         if (\filter_var($input->getOption('serve-static'), \FILTER_VALIDATE_BOOLEAN)) {
