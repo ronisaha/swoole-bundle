@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace K911\Swoole\Bridge\Symfony\HttpFoundation\Session;
 
+use K911\Swoole\Bridge\Symfony\HttpFoundation\RequestChecker;
 use K911\Swoole\Server\Session\StorageInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -33,7 +34,7 @@ final class SetSessionCookieEventListener implements EventSubscriberInterface
 
     public function onKernelRequest(RequestEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!RequestChecker::isMainRequest($event)) {
             return;
         }
 
@@ -47,7 +48,7 @@ final class SetSessionCookieEventListener implements EventSubscriberInterface
 
     public function onKernelResponse(ResponseEvent $event): void
     {
-        if (!$event->isMasterRequest() || !$this->isSessionRelated($event)) {
+        if (!RequestChecker::isMainRequest($event) || !$this->isSessionRelated($event)) {
             return;
         }
 
@@ -68,7 +69,7 @@ final class SetSessionCookieEventListener implements EventSubscriberInterface
 
     public function onFinishRequest(FinishRequestEvent $event): void
     {
-        if (!$event->isMasterRequest() || !$this->isSessionRelated($event)) {
+        if (!RequestChecker::isMainRequest($event) || !$this->isSessionRelated($event)) {
             return;
         }
 
