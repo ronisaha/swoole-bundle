@@ -44,6 +44,9 @@ class StreamedResponseListener implements EventSubscriberInterface
         $this->delegate->onKernelResponse($event);
     }
 
+    /**
+     * @return array
+     */
     public static function getSubscribedEvents()
     {
         return [
